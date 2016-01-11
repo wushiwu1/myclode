@@ -1,0 +1,124 @@
+#!/bin/bash
+
+echo "关闭防火墙"
+service iptables stop
+setenforce 0
+
+yum install samba -y
+yum install samba-client -y
+service smb start
+
+echo "正在创建帐号！"
+useradd shichang
+useradd shichang1
+useradd caiwu
+useradd caiwu1
+useradd renshi
+useradd renshi1
+useradd yunying
+useradd yunying1
+useradd jishu
+useradd jishu1
+echo "创建账号结束结束,开始变为samba服务器帐号"
+echo -e  "shichang\nshichang" | smbpasswd  -a shichang  -s
+
+echo -e  "shichang1\nshichang1" | smbpasswd  -a shichang1  -s
+
+echo -e  "caiwu\ncaiwu" | smbpasswd  -a caiwu  -s
+
+echo -e  "caiwu1\ncaiwu1" | smbpasswd  -a caiwu1  -s
+
+echo -e  "renshi\nrenshi" | smbpasswd  -a renshi  -s
+
+echo -e  "renshi1\nrenshi1" | smbpasswd  -a renshi1  -s
+
+echo -e  " yunying \nyunying " | smbpasswd  -a yunying  -s
+
+echo -e  "yunying1\nyunying1" | smbpasswd  -a yunying1  -s
+
+echo -e  "jishu\njishu" | smbpasswd  -a jishu  -s
+
+echo -e  "jishu1\njishu1" | smbpasswd  -a jishu1  -s             
+#--/etc/samba/smbpasswd          --/etc/passwd
+echo "帐号配置结束,正在给文件及文件夹赋予权限"
+mkdir /fuwu
+cd /fuwu
+mkdir shichang caiwu renshi yunying jishu public
+chmod 1770 shichang
+chmod 1770 caiwu
+chmod 1770 renshi
+chmod 1770 yunying
+chmod 1770 jishu
+chmod 0775 public
+chown shichang:shichang /fuwu/shichang
+chown caiwu:caiwu /fu/caiwu
+chown renshi:renshi /fuwu/renshi
+chown yunying:yunying /fuwu/yunying
+chown jishu:jishu /fuwu/jishu
+
+cd /fuwu/public
+mkdir shichang caiwu renshi yunying jishu 
+chmod 1775 shichang
+chmod 1775 caiwu
+chmod 1775 renshi
+chmod 1775 yunying
+chmod 1775 jishu
+
+
+cp /etc/samba/smb.conf /etc/samba/smb.conf.bak
+
+cat >> /etc/samba/smb.conf <<EOF
+
+[市场部]
+        comment = shichang
+        path = /fuwu/shichang
+        browseable = yes
+        writable = yes
+        printable = no
+        valid list shichang
+        read only =no     
+        create mask = 1755   
+        directory mask = 1755
+[财务部]
+        comment = caiwu
+        path = /fuwu/caiwu
+        browseable = yes
+        writable = yes
+        printable = no
+        valid list caiwu
+        read only =no     
+        create mask = 1755   
+        directory mask = 1755
+[人事部]
+        comment = renshi
+        path = /fuwu/renshi
+        browseable = yes
+        writable = yes
+        printable = no
+        valid list renshi
+        read only =no     
+        create mask = 1755   
+        directory mask = 1755
+[运营部]
+        comment = yunying
+        path = /fuwu/yunying
+        browseable = yes
+        writable = yes
+        printable = no
+        valid list yunying
+        read only =no     
+        create mask = 1755   
+        directory mask = 1755
+[技术部]
+        comment = jishu
+        path = /fuwu/jishu
+        browseable = yes
+        writable = yes
+        printable = no
+        valid list jishu
+        read only =no     
+        create mask = 1755   
+        directory mask = 1755
+EOF 
+
+ "
